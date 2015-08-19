@@ -12,7 +12,7 @@ USE `physician_survey` ;
 DROP TABLE IF EXISTS `physician_survey`.`survey` ;
 
 CREATE  TABLE IF NOT EXISTS `physician_survey`.`survey` (
-  `id` INT NOT NULL ,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `rating` INT NULL COMMENT 'Level of satisfaction the physician has.  This will range from 1 on the low end to 10 on the high end of satisfaction.' ,
   `why_feeling` VARCHAR(45) NULL COMMENT 'Why does the physician feel this way.' ,
   `work_dissatisfaction` VARCHAR(45) NULL ,
