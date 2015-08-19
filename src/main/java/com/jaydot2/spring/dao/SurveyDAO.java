@@ -83,7 +83,7 @@ public class SurveyDAO {
 		log.debug("Entering insertRecord(Survey)...");
 		
 		log.debug("Setup the parameters for the SQL statement");
-		Object[] params = new Object[]{survey.getRating(), null, survey.getWorkDissatisfaction(), survey.getAnswerMatrix(), survey.getComment()};
+		Object[] params = new Object[]{survey.getRating(), survey.getWhyFeeling(), survey.getWorkDissatisfaction(), survey.getAnswerMatrix(), survey.getComment()};
 		
 		log.debug("define the argument types...");
 		int[] types = new int[]{Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
