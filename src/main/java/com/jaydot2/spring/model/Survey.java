@@ -13,12 +13,14 @@ import java.util.Map;
 public class Survey implements Serializable {
 	
 	
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 444659582573476726L;
+	private static final long serialVersionUID = 3434647621586427645L;
 	private long id;
 	private int rating;
+	private String whyFeeling;
 	private String workDissatisfaction;
 	private String answerMatrix;
 	private Map<String,String> questionAnswer;
@@ -45,6 +47,14 @@ public class Survey implements Serializable {
 
 	public void setRating(int rating) {
 		this.rating = rating;
+	}
+
+	public String getWhyFeeling() {
+		return whyFeeling;
+	}
+
+	public void setWhyFeeling(String whyFeeling) {
+		this.whyFeeling = whyFeeling;
 	}
 
 	public String getWorkDissatisfaction() {
