@@ -3,6 +3,8 @@
  */
 package com.jaydot2.spring;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jaydot2.spring.dao.SurveyDAO;
+import com.jaydot2.spring.model.Institution;
 import com.jaydot2.spring.model.Survey;
 
 /**
@@ -36,7 +39,7 @@ public class SurveyController {
 	
 	@RequestMapping("/complex")
 	public Map<String,String> getComplexData() {
-		surveyDao = new SurveyDAO();
+		surveyDao = SurveyDAO.getInstance();
 		return surveyDao.getDummyData();
 	}
 	
@@ -64,5 +67,29 @@ public class SurveyController {
 		int rows = surveyDao.insertRecord(survey);
 		log.debug("Exiting insertRecord(int,String,String,String,String)...");
 		return rows;
+	}
+	
+	@RequestMapping(value="/neworg")
+	public int addNewInstitution(@RequestParam(value="organization_key", required=true) String orgKey, 
+			@RequestParam(value="organization_name", required=false, defaultValue="none") String orgName) {
+		log.debug("Entering addNewInstitution(String,String)...");
+		surveyDao = SurveyDAO.getInstance();
+		Institution institution = new Institution();
+		institution.setOrganizationKey(orgKey);
+		institution.setOrganizationName(orgName);
+		int rows = surveyDao.createNewInstitutionRecord(institution);
+		log.debug("Exiting addNewInstitution(String,String)...");
+		return rows;
+	}
+	
+	@RequestMapping("/institutions")
+	public Map<String,List<Institution>> getInstitutions() {
+		log.debug("Entering getInstitutions()...");
+		surveyDao = SurveyDAO.getInstance();
+		Map<String,List<Institution>> data = new HashMap<String,List<Institution>>();
+		List<Institution> institutions = surveyDao.retrieveAllInstitutions();
+		data.put("data", institutions);
+		log.debug("Exiting getInstitutions()...");
+		return data;
 	}
 }

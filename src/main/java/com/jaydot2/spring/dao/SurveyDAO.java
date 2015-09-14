@@ -4,18 +4,20 @@
 package com.jaydot2.spring.dao;
 
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.springframework.asm.Type;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Repository;
 
+import com.jaydot2.spring.model.Institution;
 import com.jaydot2.spring.model.Survey;
 
 
@@ -31,6 +33,8 @@ public class SurveyDAO {
 	private static SurveyDAO surveyDao;
 	
 	private static final String insertSQL = "INSERT INTO survey (rating, why_feeling, work_dissatisfaction, answer_matrix, comments) VALUES (?, ?, ?, ?, ?);";
+	private static final String retrieveAllInstitutionRecordsSQL = "SELECT organization_key, organization_name FROM institutions;";
+	private static final String insertInstitutionRecordSQL = "INSERT INTO institutions (organization_key, organization_name) VALUES (?,?);";
 	
 	DriverManagerDataSource dataSource = new DriverManagerDataSource();
 	
@@ -93,5 +97,56 @@ public class SurveyDAO {
 		log.debug("Exiting insertRecord(Survey)...");
 		return rowCount;
 	}
-
+	
+	/**
+	 * <p>
+	 * Create a new institution record in the institutions table
+	 * </p>
+	 * @param institution
+	 * @return
+	 */
+	public int createNewInstitutionRecord(Institution institution) {
+		log.debug("Entering createNewInstitutionRecord(Institution)...");
+		Object[] params = new Object[]{institution.getOrganizationKey(), institution.getOrganizationName()};
+		int[] types = new int[]{Types.VARCHAR, Types.VARCHAR};
+		int rowCount = jdbcTemplate.update(insertInstitutionRecordSQL, params, types);
+		log.debug("Exiting createNewInstitutionRecord(Institution)...");
+		return rowCount;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<Institution> retrieveAllInstitutions() {
+		List<Institution> institutions = new ArrayList<Institution>();
+		
+		List<Map<String,Object>> rows = jdbcTemplate.queryForList(retrieveAllInstitutionRecordsSQL);
+		for(Map<String,Object> row : rows) {
+			Institution inst = new Institution();
+			inst.setOrganizationKey((String)row.get("organization_key"));
+			inst.setOrganizationName((String)row.get("organization_name"));
+			institutions.add(inst);
+		}
+		return institutions;
+	}
+	
+	/*  MODIFY TO ALLOW CREATION OF CSV FILE
+	public void exportData(Connection conn,String filename) {
+        Statement stmt;
+        String query;
+        try {
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+             
+            //For comma separated file
+            query = "SELECT id,text,price into OUTFILE  '"+filename+
+                    "' FIELDS TERMINATED BY ',' FROM testtable t";
+            stmt.executeQuery(query);
+             
+        } catch(Exception e) {
+            e.printStackTrace();
+            stmt = null;
+        }
+    }
+	*/
 }

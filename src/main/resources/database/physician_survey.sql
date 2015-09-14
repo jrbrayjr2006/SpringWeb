@@ -18,14 +18,43 @@ CREATE  TABLE IF NOT EXISTS `physician_survey`.`survey` (
   `work_dissatisfaction` VARCHAR(45) NULL ,
   `answer_matrix` VARCHAR(45) NULL COMMENT 'Answers that are comma colon delimited to account for different numbers of questions in each group' ,
   `comments` LONGTEXT NULL COMMENT 'Detailed free text comments from physicians' ,
+  `organization_key` LONGTEXT NULL COMMENT 'Identifying key for institution' ,
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_unicode_ci, 
 COMMENT = 'Table to collect physician survey response data' ;
 
+-- -----------------------------------------------------
+-- Table `physician_survey`.`institutions`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `physician_survey`.`institutions` ;
+
+CREATE  TABLE IF NOT EXISTS `physician_survey`.`institutions` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `organization_key` VARCHAR(45) NULL COMMENT 'Identifying key for institution.' ,
+  `organization_name` VARCHAR(45) NULL COMMENT 'Name of the medical institutions.', 
+  PRIMARY KEY (`id`) )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci, 
+COMMENT = 'Table of medical institutions' ;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+INSERT INTO institutions (organization_key, organization_name) VALUES ("MCNI001","Mercy North Iowa");
+
+
+-- ---------------------------
+-- Export data to CSV
+-- ---------------------------
+SELECT id, rating, why_feeling, work_dissatisfaction, answer_matrix, comments 
+FROM survey
+-- WHERE organization_key = 'DEMO'
+-- INTO OUTFILE '/usr/ec2-user/survey.csv'
+INTO OUTFILE '/Users/james_r_bray/survey.csv'
+FIELDS ENCLOSED BY '"' TERMINATED BY ';' ESCAPED BY '"'
+LINES TERMINATED BY '\r\n';
