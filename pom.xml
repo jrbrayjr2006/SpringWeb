@@ -18,6 +18,7 @@
 		<junit.version>4.11</junit.version>
 		<spring.data.version>1.8.2.RELEASE</spring.data.version>
 		<apache.commons.dbcp.version>2.1</apache.commons.dbcp.version>
+		<apache.commons.csv.version>1.2</apache.commons.csv.version>
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -49,6 +50,11 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>
 			<version>${apache.commons.dbcp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>${apache.commons.csv.version}</version>
 		</dependency>
 		
 				

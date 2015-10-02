@@ -3,6 +3,7 @@
  */
 package com.jaydot2.spring;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,10 +17,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jaydot2.spring.dao.SurveyDAO;
+import com.jaydot2.spring.delegate.DataToCSVDelegate;
 import com.jaydot2.spring.model.Institution;
 import com.jaydot2.spring.model.Survey;
 
 /**
+ * <b>Description:</b>
+ * <p>
+ * These are a set of exposed API's for CRUD operations on a backend database
+ * </p>
  * @author james_r_bray
  *
  */
@@ -69,16 +75,32 @@ public class SurveyController {
 		return rows;
 	}
 	
+	/**
+	 * <b>Description:</b>
+	 * <p>
+	 * Exposed API for adding a new medical institution
+	 * </p>
+	 * <b>EXAMPLE:</b>
+	 * <pre>
+	 * http://localhost:8080/spring/neworg?organization_key=UCHI001&organization_name=University%20of%20Chicago%Medical&demo=PROD
+	 * </pre>
+	 * @param orgKey
+	 * @param orgName
+	 * @param demo
+	 * @return
+	 */
 	@RequestMapping(value="/neworg")
 	public int addNewInstitution(@RequestParam(value="organization_key", required=true) String orgKey, 
-			@RequestParam(value="organization_name", required=false, defaultValue="none") String orgName) {
-		log.debug("Entering addNewInstitution(String,String)...");
+			@RequestParam(value="organization_name", required=false, defaultValue="none") String orgName,
+			@RequestParam(value="demo", required=false, defaultValue="DEMO") String demo) {
+		log.debug("Entering addNewInstitution(String,String,String)...");
 		surveyDao = SurveyDAO.getInstance();
 		Institution institution = new Institution();
 		institution.setOrganizationKey(orgKey);
 		institution.setOrganizationName(orgName);
+		institution.setDemo(demo);
 		int rows = surveyDao.createNewInstitutionRecord(institution);
-		log.debug("Exiting addNewInstitution(String,String)...");
+		log.debug("Exiting addNewInstitution(String,String,String)...");
 		return rows;
 	}
 	
@@ -91,5 +113,18 @@ public class SurveyController {
 		data.put("data", institutions);
 		log.debug("Exiting getInstitutions()...");
 		return data;
+	}
+	
+	@RequestMapping("/exportdata")
+	public String getSurveyDataAsCSV() {
+		log.debug("Entering getSurveyDataAsCSV()...");
+		List<Survey> data = new ArrayList<Survey>();
+		Object[] header = {"id", "rating", "why_feeling", "work_dissatisfaction", "answer_matrix", "comments"};
+		DataToCSVDelegate dataToCSV = new DataToCSVDelegate(header);
+		surveyDao = SurveyDAO.getInstance();
+		data = surveyDao.retrieveAllSurveyRecords();
+		String output = dataToCSV.convertSurveysToCSV(data);
+		log.debug("Exiting getSurveyDataAsCSV()...");
+		return output;
 	}
 }

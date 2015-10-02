@@ -34,6 +34,7 @@ CREATE  TABLE IF NOT EXISTS `physician_survey`.`institutions` (
   `id` INT NOT NULL AUTO_INCREMENT ,
   `organization_key` VARCHAR(45) NULL COMMENT 'Identifying key for institution.' ,
   `organization_name` VARCHAR(45) NULL COMMENT 'Name of the medical institutions.', 
+  `demo` VARCHAR(5) NOT NULL COMMENT 'Is this a demo institution that is not used in production',
   PRIMARY KEY (`id`) )
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
@@ -45,7 +46,7 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-INSERT INTO institutions (organization_key, organization_name) VALUES ("MCNI001","Mercy North Iowa");
+INSERT INTO institutions (organization_key, organization_name, demo) VALUES ("MCNI001","Mercy North Iowa","DEMO");
 
 
 -- ---------------------------

@@ -3,6 +3,8 @@
  */
 package com.jaydot2.spring.dao;
 
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Repository;
 
 import com.jaydot2.spring.model.Institution;
 import com.jaydot2.spring.model.Survey;
+import com.mysql.jdbc.Connection;
 
 
 /**
@@ -33,8 +36,11 @@ public class SurveyDAO {
 	private static SurveyDAO surveyDao;
 	
 	private static final String insertSQL = "INSERT INTO survey (rating, why_feeling, work_dissatisfaction, answer_matrix, comments) VALUES (?, ?, ?, ?, ?);";
-	private static final String retrieveAllInstitutionRecordsSQL = "SELECT organization_key, organization_name FROM institutions;";
-	private static final String insertInstitutionRecordSQL = "INSERT INTO institutions (organization_key, organization_name) VALUES (?,?);";
+	private static final String retrieveAllInstitutionRecordsSQL = "SELECT organization_key, organization_name, demo FROM institutions;";
+	
+	private static final String insertInstitutionRecordSQL = "INSERT INTO institutions (organization_key, organization_name, demo) VALUES (?,?,?);";
+	private static final String retrieveInstitutionRecordSQL = "SELECT organization_key, organization_name, demo FROM institutions WHERE organization_key = ?;";
+	private static final String retrieveAllSurveyDataSQL = "SELECT * FROM survey;";
 	
 	DriverManagerDataSource dataSource = new DriverManagerDataSource();
 	
@@ -79,6 +85,25 @@ public class SurveyDAO {
 		return rowCount;
 	}
 	
+	public List<Survey> retrieveAllSurveyRecords() {
+		log.debug("Entering retrieveAllSurveyRecords()...");
+		List<Survey> surveys = new ArrayList<Survey>();
+		
+		List<Map<String,Object>> rows = jdbcTemplate.queryForList(retrieveAllSurveyDataSQL);
+		for(Map<String,Object> row : rows) {
+			Survey survey = new Survey();
+			survey.setId((Integer)row.get("id"));
+			survey.setRating((Integer)row.get("rating"));
+			survey.setWhyFeeling((String)row.get("why_feeling"));
+			survey.setWorkDissatisfaction((String)row.get("work_dissatisfaction"));
+			survey.setAnswerMatrix((String)row.get("answer_matrix"));
+			survey.setComment((String)row.get("comments"));
+			surveys.add(survey);
+		}
+		log.debug("Exiting retrieveAllSurveyRecords()...");
+		return surveys;
+	}
+	
 	/**
 	 * Insert a new record into the survey table
 	 * @param survey
@@ -107,8 +132,8 @@ public class SurveyDAO {
 	 */
 	public int createNewInstitutionRecord(Institution institution) {
 		log.debug("Entering createNewInstitutionRecord(Institution)...");
-		Object[] params = new Object[]{institution.getOrganizationKey(), institution.getOrganizationName()};
-		int[] types = new int[]{Types.VARCHAR, Types.VARCHAR};
+		Object[] params = new Object[]{institution.getOrganizationKey(), institution.getOrganizationName(), institution.getDemo()};
+		int[] types = new int[]{Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 		int rowCount = jdbcTemplate.update(insertInstitutionRecordSQL, params, types);
 		log.debug("Exiting createNewInstitutionRecord(Institution)...");
 		return rowCount;
@@ -126,12 +151,30 @@ public class SurveyDAO {
 			Institution inst = new Institution();
 			inst.setOrganizationKey((String)row.get("organization_key"));
 			inst.setOrganizationName((String)row.get("organization_name"));
+			inst.setDemo((String)row.get("demo"));
 			institutions.add(inst);
 		}
 		return institutions;
 	}
 	
-	/*  MODIFY TO ALLOW CREATION OF CSV FILE
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public boolean retrieveInstitution(String key) {
+		Institution inst = new Institution();
+		boolean result = false;
+		//TODO add logic to get institution
+		Object params[] = new Object[]{key};
+		int count = jdbcTemplate.queryForObject(retrieveInstitutionRecordSQL, params, Integer.class);
+		if(count > 0) {
+			result = true;
+		}
+		return result;
+	}
+	
+	/*  MODIFY TO ALLOW CREATION OF CSV FILE */
 	public void exportData(Connection conn,String filename) {
         Statement stmt;
         String query;
@@ -139,8 +182,8 @@ public class SurveyDAO {
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
              
             //For comma separated file
-            query = "SELECT id,text,price into OUTFILE  '"+filename+
-                    "' FIELDS TERMINATED BY ',' FROM testtable t";
+            query = "SELECT * FROM survey into OUTFILE  '"+filename+
+                    "' FIELDS TERMINATED BY ',' FROM survey t";
             stmt.executeQuery(query);
              
         } catch(Exception e) {
@@ -148,5 +191,5 @@ public class SurveyDAO {
             stmt = null;
         }
     }
-	*/
+	//*/
 }

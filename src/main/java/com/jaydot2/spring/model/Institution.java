@@ -11,6 +11,7 @@ public class Institution {
 	
 	private String organizationKey;
 	private String organizationName;
+	private String demo;
 
 	/**
 	 * Default no argument constructor
@@ -33,6 +34,14 @@ public class Institution {
 
 	public void setOrganizationName(String organizationName) {
 		this.organizationName = organizationName;
+	}
+
+	public String getDemo() {
+		return demo;
+	}
+
+	public void setDemo(String demo) {
+		this.demo = demo;
 	}
 
 }
