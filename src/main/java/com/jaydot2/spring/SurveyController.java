@@ -30,7 +30,7 @@ import com.jaydot2.spring.model.Survey;
  * @author james_r_bray
  *
  */
-@CrossOrigin(origins = "http://www.jaydot2.com:8080", maxAge = 3600)
+@CrossOrigin(origins = "http://www.jaydot2.com", maxAge = 3600)
 @RestController
 public class SurveyController {
 	
