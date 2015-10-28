@@ -43,14 +43,14 @@ public class DataToCSVDelegate {
 	public String convertSurveysToCSV(List<Survey> surveys) {
 		log.debug("Entering convertSurveysToCSV(List<Survey>)...");
 		// could create a factory to handle this
-		FileWriter fWriter = null;
+		//FileWriter fWriter = null;
 		StringWriter sWriter = null;
 		StringBuffer output = new StringBuffer();
 		CSVPrinter csvFilePrinter = null;
 		CSVFormat csvFormat = CSVFormat.DEFAULT.withRecordSeparator(NEW_LINE_SEPARATOR);
 		try {
 			sWriter = new StringWriter();
-			fWriter = new FileWriter("/Users/james_r_bray/survey_data.txt");
+			//fWriter = new FileWriter("/home/ec2-user/survey_data.txt");
 			csvFilePrinter = new CSVPrinter(sWriter, csvFormat);
 			for(Survey survey : surveys) {
 				List<String> surveyRecord = new ArrayList<String>();

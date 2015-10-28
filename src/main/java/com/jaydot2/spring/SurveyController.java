@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +30,7 @@ import com.jaydot2.spring.model.Survey;
  * @author james_r_bray
  *
  */
+@CrossOrigin(origins = "http://www.jaydot2.com:8080", maxAge = 3600)
 @RestController
 public class SurveyController {
 	
