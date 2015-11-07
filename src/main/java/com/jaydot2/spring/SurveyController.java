@@ -117,6 +117,17 @@ public class SurveyController {
 		return data;
 	}
 	
+	@RequestMapping("/surveydata")
+	public Map<String, List<Survey>> getSurveyData() {
+		log.debug("Entering getSurveyData()...");
+		surveyDao = SurveyDAO.getInstance();
+		Map<String, List<Survey>> data = new HashMap<String, List<Survey>>();
+		List<Survey> surveys = surveyDao.retrieveAllSurveyRecords();
+		data.put("data", surveys);
+		log.debug("Exiting getSurveyData()...");
+		return data;
+	}
+	
 	@RequestMapping("/exportdata")
 	public String getSurveyDataAsCSV() {
 		log.debug("Entering getSurveyDataAsCSV()...");
