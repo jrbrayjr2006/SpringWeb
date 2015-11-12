@@ -30,7 +30,7 @@ import com.jaydot2.spring.model.Survey;
  * @author james_r_bray
  *
  */
-@CrossOrigin(origins = "http://www.jaydot2.com", maxAge = 3600)
+@CrossOrigin(maxAge = 3600)
 @RestController
 public class SurveyController {
 	
@@ -51,12 +51,14 @@ public class SurveyController {
 		return surveyDao.getDummyData();
 	}
 	
+	@CrossOrigin
 	@RequestMapping("/count")
 	public int getRowCount() {
 		surveyDao = SurveyDAO.getInstance();
 		return surveyDao.getRecordCount();
 	}
 	
+	@CrossOrigin
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public int insertRecord(@RequestParam(value="rating", required=true) int rating, 
 			@RequestParam(value="why_feeling", required=true) String whyFeeling,
@@ -91,6 +93,7 @@ public class SurveyController {
 	 * @param demo
 	 * @return
 	 */
+	@CrossOrigin
 	@RequestMapping(value="/neworg")
 	public int addNewInstitution(@RequestParam(value="organization_key", required=true) String orgKey, 
 			@RequestParam(value="organization_name", required=false, defaultValue="none") String orgName,
@@ -106,6 +109,7 @@ public class SurveyController {
 		return rows;
 	}
 	
+	@CrossOrigin
 	@RequestMapping("/institutions")
 	public Map<String,List<Institution>> getInstitutions() {
 		log.debug("Entering getInstitutions()...");
@@ -117,6 +121,7 @@ public class SurveyController {
 		return data;
 	}
 	
+	@CrossOrigin
 	@RequestMapping("/surveydata")
 	public Map<String, List<Survey>> getSurveyData() {
 		log.debug("Entering getSurveyData()...");
@@ -128,6 +133,7 @@ public class SurveyController {
 		return data;
 	}
 	
+	@CrossOrigin
 	@RequestMapping("/exportdata")
 	public String getSurveyDataAsCSV() {
 		log.debug("Entering getSurveyDataAsCSV()...");
