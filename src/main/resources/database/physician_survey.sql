@@ -47,6 +47,7 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 INSERT INTO institutions (organization_key, organization_name, demo) VALUES ("MCNI001","Mercy North Iowa","DEMO");
+INSERT INTO institutions (organization_key, organization_name, demo) VALUES ("AKRON01","Akron","DEMO");
 
 
 -- ---------------------------
