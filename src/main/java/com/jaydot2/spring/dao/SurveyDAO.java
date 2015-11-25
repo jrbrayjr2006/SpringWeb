@@ -4,6 +4,7 @@
 package com.jaydot2.spring.dao;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import javax.sql.DataSource;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Repository;
 
@@ -35,12 +37,13 @@ public class SurveyDAO {
 	
 	private static SurveyDAO surveyDao;
 	
-	private static final String insertSQL = "INSERT INTO survey (rating, why_feeling, work_dissatisfaction, answer_matrix, comments) VALUES (?, ?, ?, ?, ?);";
+	private static final String insertSQL = "INSERT INTO survey (rating, why_feeling, work_dissatisfaction, answer_matrix, comments, organization_key) VALUES (?, ?, ?, ?, ?, ?);";
 	private static final String retrieveAllInstitutionRecordsSQL = "SELECT organization_key, organization_name, demo FROM institutions;";
 	
 	private static final String insertInstitutionRecordSQL = "INSERT INTO institutions (organization_key, organization_name, demo) VALUES (?,?,?);";
 	private static final String retrieveInstitutionRecordSQL = "SELECT organization_key, organization_name, demo FROM institutions WHERE organization_key = ?;";
 	private static final String retrieveAllSurveyDataSQL = "SELECT * FROM survey;";
+	private static final String retrieveSurveyRecordsByInstitutionSQL = "SELECT id, rating, why_feeling, work_dissatisfaction, answer_matrix, comments, organization_key FROM survey WHERE organization_key = ?;";
 	
 	DriverManagerDataSource dataSource = new DriverManagerDataSource();
 	
@@ -98,9 +101,35 @@ public class SurveyDAO {
 			survey.setWorkDissatisfaction((String)row.get("work_dissatisfaction"));
 			survey.setAnswerMatrix((String)row.get("answer_matrix"));
 			survey.setComment((String)row.get("comments"));
+			survey.setKey((String)row.get("organization_key")); 
 			surveys.add(survey);
 		}
 		log.debug("Exiting retrieveAllSurveyRecords()...");
+		return surveys;
+	}
+	
+	public List<Survey> retrieveSurveyRecordsByInstitution(String key) {
+		log.debug("Entering retrieveSurveyRecordsByInstitution(String)...");
+		List<Survey> surveys = new ArrayList<Survey>();
+		
+		Object[] params = new Object[]{key};
+		
+		surveys = jdbcTemplate.query(retrieveSurveyRecordsByInstitutionSQL, params, new RowMapper<Survey>() {
+
+			@Override
+			public Survey mapRow(ResultSet rs, int row) throws SQLException {
+				Survey survey = new Survey();
+				survey.setId(rs.getInt("id"));
+				survey.setRating(rs.getInt("rating"));
+				survey.setWhyFeeling(rs.getString("why_feeling"));
+				survey.setWorkDissatisfaction(rs.getString("work_dissatisfaction"));
+				survey.setAnswerMatrix(rs.getString("answer_matrix"));
+				survey.setComment(rs.getString("comments"));
+				survey.setKey(rs.getString("organization_key"));
+				return survey;
+			}});
+		
+		log.debug("Exiting retrieveSurveyRecordsByInstitution(String)...");
 		return surveys;
 	}
 	
@@ -112,10 +141,10 @@ public class SurveyDAO {
 		log.debug("Entering insertRecord(Survey)...");
 		
 		log.debug("Setup the parameters for the SQL statement");
-		Object[] params = new Object[]{survey.getRating(), survey.getWhyFeeling(), survey.getWorkDissatisfaction(), survey.getAnswerMatrix(), survey.getComment()};
+		Object[] params = new Object[]{survey.getRating(), survey.getWhyFeeling(), survey.getWorkDissatisfaction(), survey.getAnswerMatrix(), survey.getComment(), survey.getKey()};
 		
 		log.debug("define the argument types...");
-		int[] types = new int[]{Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
+		int[] types = new int[]{Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR};
 		
 		int rowCount = jdbcTemplate.update(insertSQL, params, types);
 		log.debug(rowCount +" records successfully inserted!");

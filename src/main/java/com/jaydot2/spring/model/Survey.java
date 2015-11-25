@@ -25,6 +25,7 @@ public class Survey implements Serializable {
 	private String answerMatrix;
 	private Map<String,String> questionAnswer;
 	private String comment;
+	private String key;
 
 	/**
 	 * 
@@ -87,6 +88,14 @@ public class Survey implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	@Override

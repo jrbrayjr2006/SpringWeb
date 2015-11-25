@@ -64,7 +64,8 @@ public class SurveyController {
 			@RequestParam(value="why_feeling", required=true) String whyFeeling,
 			@RequestParam(value="work_dissatisfaction", required=true) String workDissatisfaction,
 			@RequestParam(value="answer_matrix", required=false, defaultValue="") String answerMatrix,
-			@RequestParam(value="comments", required=false, defaultValue="no comment") String comments) {
+			@RequestParam(value="comments", required=false, defaultValue="no comment") String comments,
+			@RequestParam(value="organization_key", required=true, defaultValue="DEMO") String key){
 		log.debug("Entering insertRecord(int,String,String,String,String)...");
 		surveyDao = SurveyDAO.getInstance();
 		Survey survey = new Survey();
@@ -73,6 +74,7 @@ public class SurveyController {
 		survey.setWorkDissatisfaction(workDissatisfaction);
 		survey.setAnswerMatrix(answerMatrix);
 		survey.setComment(comments);
+		survey.setKey(key);
 		log.debug("Feeling is " + survey.getWhyFeeling());
 		int rows = surveyDao.insertRecord(survey);
 		log.debug("Exiting insertRecord(int,String,String,String,String)...");
@@ -130,6 +132,18 @@ public class SurveyController {
 		List<Survey> surveys = surveyDao.retrieveAllSurveyRecords();
 		data.put("data", surveys);
 		log.debug("Exiting getSurveyData()...");
+		return data;
+	}
+	
+	@CrossOrigin
+	@RequestMapping("/institutionsurveydata")
+	public Map<String, List<Survey>> getSurveyDataByInstitution(@RequestParam(value="organization_key", required=true, defaultValue="DEMO") String key) {
+		log.debug("Entering getSurveyDataByInstitution(String)...");
+		surveyDao = SurveyDAO.getInstance();
+		Map<String, List<Survey>> data = new HashMap<String, List<Survey>>();
+		List<Survey> surveys = surveyDao.retrieveSurveyRecordsByInstitution(key);
+		data.put("data", surveys);
+		log.debug("Exiting getSurveyDataByInstitution(String)...");
 		return data;
 	}
 	
