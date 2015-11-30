@@ -96,7 +96,7 @@ public class SurveyController {
 	 * @return
 	 */
 	@CrossOrigin
-	@RequestMapping(value="/neworg")
+	@RequestMapping(value="/neworg", method=RequestMethod.POST)
 	public int addNewInstitution(@RequestParam(value="organization_key", required=true) String orgKey, 
 			@RequestParam(value="organization_name", required=false, defaultValue="none") String orgName,
 			@RequestParam(value="demo", required=false, defaultValue="DEMO") String demo) {
