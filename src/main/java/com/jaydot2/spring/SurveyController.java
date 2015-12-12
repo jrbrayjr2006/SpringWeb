@@ -181,9 +181,12 @@ public class SurveyController {
 	}
 	
 	/**
-	 * 
+	 * <p>
+	 * Export the data to an Excel spreadsheet
+	 * </p>
 	 * @return
 	 */
+	@CrossOrigin
 	@RequestMapping("/exporttoexcel")
 	public String exportDataToSpreadsheet() {
 		log.debug("Entering exportDataToSpreadsheet()...");

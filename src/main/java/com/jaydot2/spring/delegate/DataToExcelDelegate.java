@@ -95,7 +95,7 @@ public class DataToExcelDelegate {
 		}
 		
 		try {
-			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("/var/www/html/docsurvey/downloads/survey.xlsx"));
+			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("/var/www/html/docsurvey/downloads/survey.xls"));
 			wb.write(bos);
 			bos.close();
 		} catch(IOException ioe) {
