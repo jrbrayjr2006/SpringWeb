@@ -72,7 +72,7 @@ public class DataToExcelDelegate {
 		cellE1.setCellValue("ANSWER");
 		Cell cellF1 = rowHeader.createCell(5);
 		cellF1.setCellValue("COMMENT");
-		Cell cellG1 = rowHeader.createCell(1);
+		Cell cellG1 = rowHeader.createCell(6);
 		cellG1.setCellValue("INSTITUTION KEY");
 		// loop here and create data rows
 		for(Survey survey : surveys) {
@@ -90,7 +90,7 @@ public class DataToExcelDelegate {
 			cellE.setCellValue(survey.getAnswerMatrix());
 			Cell cellF = row.createCell(5);
 			cellF.setCellValue(survey.getComment());
-			Cell cellG = row.createCell(1);
+			Cell cellG = row.createCell(6);
 			cellG.setCellValue(survey.getKey());
 		}
 		
