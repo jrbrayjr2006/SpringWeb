@@ -44,6 +44,7 @@ public class SurveyDAO {
 	private static final String retrieveInstitutionRecordSQL = "SELECT organization_key, organization_name, demo FROM institutions WHERE organization_key = ?;";
 	private static final String retrieveAllSurveyDataSQL = "SELECT * FROM survey;";
 	private static final String retrieveSurveyRecordsByInstitutionSQL = "SELECT id, rating, why_feeling, work_dissatisfaction, answer_matrix, comments, organization_key FROM survey WHERE organization_key = ?;";
+	private static final String deleteAllInstitutionsSQL = "TRUNCATE institutions;";
 	
 	DriverManagerDataSource dataSource = new DriverManagerDataSource();
 	
@@ -200,6 +201,20 @@ public class SurveyDAO {
 		if(count > 0) {
 			result = true;
 		}
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean deleteAllInstitutions() {
+		log.debug("Entering deleteAllInstitutions...");
+		boolean result = true;
+		
+		jdbcTemplate.execute(deleteAllInstitutionsSQL);
+		
+		log.debug("Exiting deleteAllInstitutions...");
 		return result;
 	}
 	

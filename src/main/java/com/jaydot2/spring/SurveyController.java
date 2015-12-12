@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jaydot2.spring.dao.SurveyDAO;
 import com.jaydot2.spring.delegate.DataToCSVDelegate;
+import com.jaydot2.spring.delegate.DataToExcelDelegate;
 import com.jaydot2.spring.model.Institution;
 import com.jaydot2.spring.model.Survey;
 
@@ -159,5 +160,36 @@ public class SurveyController {
 		String output = dataToCSV.convertSurveysToCSV(data);
 		log.debug("Exiting getSurveyDataAsCSV()...");
 		return output;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/deleteinstitutions")
+	public String deleteInstitutions() {
+		log.debug("Entering deleteInstitutions()...");
+		String message = "not deleted";
+		surveyDao = SurveyDAO.getInstance();
+		boolean result = surveyDao.deleteAllInstitutions();
+		if(result) {
+			message = "institutions deleted";
+		}
+		
+		log.debug("Exiting deleteInstitutions()...");
+		return message;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/exporttoexcel")
+	public String exportDataToSpreadsheet() {
+		log.debug("Entering exportDataToSpreadsheet()...");
+		DataToExcelDelegate dataToExcel = new DataToExcelDelegate();
+		dataToExcel.createSpreadsheet();
+		log.debug("Exiting exportDataToSpreadsheet()...");
+		return "survey.xlsx";
 	}
 }
