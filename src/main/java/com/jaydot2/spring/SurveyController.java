@@ -188,11 +188,13 @@ public class SurveyController {
 	 */
 	@CrossOrigin
 	@RequestMapping("/exporttoexcel")
-	public String exportDataToSpreadsheet() {
+	public Map<String,String> exportDataToSpreadsheet() {
 		log.debug("Entering exportDataToSpreadsheet()...");
 		DataToExcelDelegate dataToExcel = new DataToExcelDelegate();
 		dataToExcel.createSpreadsheet();
+		Map<String, String> data = new HashMap<String, String>();
+		data.put("data", "survey.xls");
 		log.debug("Exiting exportDataToSpreadsheet()...");
-		return "survey.xlsx";
+		return data;
 	}
 }
