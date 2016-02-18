@@ -68,3 +68,10 @@ FROM survey
 INTO OUTFILE '/Users/james_r_bray/survey.csv'
 FIELDS ENCLOSED BY '"' TERMINATED BY ';' ESCAPED BY '"'
 LINES TERMINATED BY '\r\n';
+
+
+-- ----------------------------
+-- alter the database
+-- ----------------------------
+ALTER TABLE survey ADD COLUMN date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE survey ADD COLUMN date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
