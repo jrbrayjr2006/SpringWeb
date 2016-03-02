@@ -59,6 +59,18 @@ public class SurveyController {
 		return surveyDao.getRecordCount();
 	}
 	
+	/**
+	 * <p>
+	 * <b>Example Query String</b> ?rating=8&why_feeling=Sound Operations&work_dissatisfaction=Human Resources&answer_matrix=THIS IS just a test comment.&comments=THIS IS just a test comment.&organization_key=DEMO
+	 * </p>
+	 * @param rating
+	 * @param whyFeeling
+	 * @param workDissatisfaction
+	 * @param answerMatrix
+	 * @param comments
+	 * @param key
+	 * @return
+	 */
 	@CrossOrigin
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	public int insertRecord(@RequestParam(value="rating", required=true) int rating, 
