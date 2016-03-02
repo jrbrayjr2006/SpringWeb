@@ -107,7 +107,7 @@ public class SurveyDAO {
 			survey.setComment((String)row.get("comments"));
 			survey.setKey((String)row.get("organization_key")); 
 			// date data
-			java.sql.Date sqlCreateDate = (java.sql.Date)row.get("date_created");
+			java.sql.Timestamp sqlCreateDate = (java.sql.Timestamp)row.get("date_created");
 			//Date mDate = new Date(sqlCreateDate.getTime());
 			String createDate = sdf.format(sqlCreateDate);
 			survey.setCreateDate(createDate);
