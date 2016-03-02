@@ -7,6 +7,13 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
+ * <b>Description</b>
+ * <p>
+ * Model for survey data
+ * </p>
+ * <p>
+ * Added createDate property and accessor methods 2016-03-01
+ * </p>
  * @author james_r_bray
  *
  */
@@ -26,6 +33,7 @@ public class Survey implements Serializable {
 	private Map<String,String> questionAnswer;
 	private String comment;
 	private String key;
+	private String createDate;
 
 	/**
 	 * 
@@ -96,6 +104,14 @@ public class Survey implements Serializable {
 
 	public void setKey(String key) {
 		this.key = key;
+	}
+
+	public String getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(String createDate) {
+		this.createDate = createDate;
 	}
 
 	@Override

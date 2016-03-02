@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +94,7 @@ public class SurveyDAO {
 	public List<Survey> retrieveAllSurveyRecords() {
 		log.debug("Entering retrieveAllSurveyRecords()...");
 		List<Survey> surveys = new ArrayList<Survey>();
+		SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
 		
 		List<Map<String,Object>> rows = jdbcTemplate.queryForList(retrieveAllSurveyDataSQL);
 		for(Map<String,Object> row : rows) {
@@ -103,6 +106,11 @@ public class SurveyDAO {
 			survey.setAnswerMatrix((String)row.get("answer_matrix"));
 			survey.setComment((String)row.get("comments"));
 			survey.setKey((String)row.get("organization_key")); 
+			// date data
+			java.sql.Date sqlCreateDate = (java.sql.Date)row.get("date_created");
+			//Date mDate = new Date(sqlCreateDate.getTime());
+			String createDate = sdf.format(sqlCreateDate);
+			survey.setCreateDate(createDate);
 			surveys.add(survey);
 		}
 		log.debug("Exiting retrieveAllSurveyRecords()...");
