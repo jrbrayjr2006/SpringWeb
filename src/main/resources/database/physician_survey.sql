@@ -75,3 +75,7 @@ LINES TERMINATED BY '\r\n';
 -- ----------------------------
 ALTER TABLE survey ADD COLUMN date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 ALTER TABLE survey ADD COLUMN date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+-- all null dates
+ALTER TABLE survey MODIFY COLUMN date_created TIMESTAMP NULL;
+
+UPDATE survey SET date_created='1970-01-01 01:00:00' WHERE date_created='0000-00-00 00:00:00';

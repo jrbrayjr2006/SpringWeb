@@ -44,7 +44,7 @@ public class SurveyDAO {
 	
 	private static final String insertInstitutionRecordSQL = "INSERT INTO institutions (organization_key, organization_name, demo) VALUES (?,?,?);";
 	private static final String retrieveInstitutionRecordSQL = "SELECT organization_key, organization_name, demo FROM institutions WHERE organization_key = ?;";
-	private static final String retrieveAllSurveyDataSQL = "SELECT CASE date_created WHEN '0000-00-00 00:00:00' THEN '1970-01-01 01:00:00' ELSE date_created END AS date_created FROM survey;";  //"SELECT * FROM survey;";
+	private static final String retrieveAllSurveyDataSQL = "SELECT * FROM survey;";
 	private static final String retrieveSurveyRecordsByInstitutionSQL = "SELECT id, rating, why_feeling, work_dissatisfaction, answer_matrix, comments, organization_key FROM survey WHERE organization_key = ?;";
 	private static final String deleteAllInstitutionsSQL = "TRUNCATE institutions;";
 	
